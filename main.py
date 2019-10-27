@@ -1,4 +1,4 @@
-print("Test ...")
+from bs4 import BeautifulSoup
 
 SIMPLE_HTML = """
 {% load staticfiles %}
@@ -19,6 +19,15 @@ SIMPLE_HTML = """
 </head>
 
 <body>
+    <h1>This is me</h1>
+    <p class="who">this is me</p>
+    <p class="why">Learning step by step</p>
+    <ul>
+      <li>Ahmed</li>
+      <li>sabry</li>
+      <li>Mohamed</li>
+      <li>Hard Worker</li>
+    </ul>
 
   <nav>
     <div class="container nav-wrapper">
@@ -43,7 +52,7 @@ SIMPLE_HTML = """
     <div class="col s4">
       <div class="center">
         <i class="large material-icons" style="color:orange">camera</i>
-        <p>Filter your searches</p>
+        <p class='who'>Filter your searches</p>
         <p class="light center">We built in functionality to filter based on pricing</p>
       </div>
     </div>
@@ -73,4 +82,33 @@ SIMPLE_HTML = """
 
 </html>"""
 
-print(SIMPLE_HTML)
+simple_soup = BeautifulSoup(SIMPLE_HTML,'html.parser')
+
+def find_title():
+        h1_tag = simple_soup.find("h1")
+        print(h1_tag.string)
+
+# find_title()
+
+
+def list_items():
+    list_item = simple_soup.find_all('li')
+    new_list = [i.string for i in list_item]
+    return new_list
+
+
+# print(list_items())
+def find_pgraph():
+    get_p = simple_soup.find_all('p',{'class':'who'})
+    new_p = [p.string for p in get_p]
+    return new_p
+
+# print(find_pgraph())
+
+def other_graph():
+    alparagraph = simple_soup.find_all('p')
+    without_class = [p.string for p in alparagraph if 'who' not in p.attrs.get('class',[]) and 'why' not in p.attrs.get('class',[])]
+
+    return without_class[0]
+
+print(other_graph())
